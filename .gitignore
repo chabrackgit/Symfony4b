@@ -20,4 +20,4 @@
 ###< symfony/web-server-bundle ###
 
 ###< symfony/src/Command ###
-/src/Command
+/src/
