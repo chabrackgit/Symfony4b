@@ -20,5 +20,7 @@
 ###< symfony/web-server-bundle ###
 
 
-
+/tmp/
+tmp/*
+inform2.php
 inform.php
