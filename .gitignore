@@ -21,3 +21,4 @@
 
 ###< symfony/src/Command ###
 /src/Command
+/src/*
