@@ -20,14 +20,4 @@
 ###< symfony/web-server-bundle ###
 
 
-/tmp/
-tmp/*
-inform2.php
-informationgeneral.html
 
-<<<<<<< HEAD
-inform.php
-
-README.md
-=======
->>>>>>> 6118bce6337d950c3f83529b93feaf191b336f87
