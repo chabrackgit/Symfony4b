@@ -48,7 +48,7 @@ class Article
     private $createdUser;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
      */
     private $updateUser;
 
@@ -135,12 +135,12 @@ class Article
         return $this;
     }
 
-    public function getUpdateUser(): ?\DateTimeInterface
+    public function getUpdateUser(): ?int
     {
         return $this->updateUser;
     }
 
-    public function setUpdateUser(\DateTimeInterface $updateUser): self
+    public function setUpdateUser(int $updateUser): self
     {
         $this->updateUser = $updateUser;
 

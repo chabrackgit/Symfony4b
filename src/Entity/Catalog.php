@@ -25,7 +25,7 @@ class Catalog
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $description;
 
@@ -40,12 +40,12 @@ class Catalog
     private $updateDate;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
      */
     private $createdUser;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="integer")
      */
     private $updateUser;
 
@@ -112,24 +112,24 @@ class Catalog
         return $this;
     }
 
-    public function getCreatedUser(): ?\DateTimeInterface
+    public function getCreatedUser(): ?int
     {
         return $this->createdUser;
     }
 
-    public function setCreatedUser(\DateTimeInterface $createdUser): self
+    public function setCreatedUser(int $createdUser): self
     {
         $this->createdUser = $createdUser;
 
         return $this;
     }
 
-    public function getUpdateUser(): ?\DateTimeInterface
+    public function getUpdateUser(): ?int
     {
         return $this->updateUser;
     }
 
-    public function setUpdateUser(\DateTimeInterface $updateUser): self
+    public function setUpdateUser(int $updateUser): self
     {
         $this->updateUser = $updateUser;
 

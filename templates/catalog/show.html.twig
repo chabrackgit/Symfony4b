@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+
+
+            <h2>{{catalog.name }}</h2>
+            <div class="content">
+                <p> {{ catalog.description }} </p>
+                <p><small>Crée le {{ catalog.createdDate | date('d/m/Y') }} Par User : {{ catalog.createdUser }}</small></p>
+
+            </div>
+
+
+{% endblock %}

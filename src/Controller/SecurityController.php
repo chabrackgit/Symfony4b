@@ -17,9 +17,7 @@ class SecurityController extends AbstractController
     public function registration(Request $request, EntityManagerInterface $entityManager)
     {
         $user = New User();
-
-        var_dump($user);
-
+        
         $form = $this->createForm(RegistrationType::class, $user);
 
         $form->handleRequest($request);
@@ -34,8 +32,6 @@ class SecurityController extends AbstractController
         return $this->render('security/registration.html.twig',[
             'form'=> $form->createView()
         ]);  
-        
-        var_dump($user);
         
     }
 }

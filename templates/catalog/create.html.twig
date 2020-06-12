@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+
+    <h1>Création d'une catégorie </h1>
+
+    {{ form_start(formCatalog) }}
+
+    {{ form_row(formCatalog.name, {'attr':{'placeholder':'Saisir nom catégorie'}}) }}
+    {{ form_row(formCatalog.description, {'attr':{'placeholder':'Saisir description'}}) }}
+
+    <button type="submit" class="btn btn-primary">Créer Catégorie</button>
+
+    {{ form_end(formCatalog) }}
+
+{% endblock %}
