@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+
+    <h1>Création d'un article </h1>
+
+    {{ form_start(formArticle) }}
+
+    {{ form_row(formArticle.name, {'attr':{'placeholder':'Saisir article'}}) }}
+    {{ form_row(formArticle.description, {'attr':{'placeholder':'Saisir description'}}) }}
+    {{ form_row(formArticle.price, {'attr':{'placeholder':'Saisir prix en €'}}) }}
+
+
+    {{ form_end(formArticle) }}
+
+{% endblock %}

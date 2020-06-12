@@ -26,23 +26,11 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ path('home') }}">Accueil <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">Articles</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Créer article</a>
-                            <a class="dropdown-item" href="#">Créer article</a>
-                        </div>
-
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('catalogs') }}">Catégories <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown">Catégories</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="{{ path('catalogs' )}}">Liste des catégories</a>
-                            <a class="dropdown-item" href="{{ path('catalog_create' )}}">Créer catégorie</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href=""></a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('article_create') }}">Créer un article <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
             </div>

@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * @ORM\Entity(repositoryClass=CatalogRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User 
 

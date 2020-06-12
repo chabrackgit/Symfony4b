@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Catalog;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +21,7 @@ class CatalogController extends AbstractController
 
         $catalogs = $repo->findAll();
 
-        return $this->render('catalog/index.html.twig', [
+        return $this->render('catalog/list.html.twig', [
             'controller_name' => 'liste des catégories',
             'catalogs' => $catalogs
         ]);
@@ -28,19 +29,12 @@ class CatalogController extends AbstractController
 
      /**
      * @Route("/catalog/new", name="catalog_create")
-     * @Route("/catalog/{id}/edit", name="catalog_edit")
      */
-    public function create(Catalog $catalog, Request $request, EntityManagerInterface $entityManager)
+    public function create(Request $request, EntityManagerInterface $entityManager)
     {
-        if(!$catalog){
-            $catalog = new Catalog();
-        }
-        
-        $catalog->setcreatedDate(new \Datetime());
-        $catalog->setupdateDate(new \Datetime());
-        $catalog->setCreatedUser(1);
-        $catalog->setUpdateUser(2);
 
+
+        $catalog = new Catalog();
 
         $form = $this ->createFormBuilder($catalog)
                       ->add('name')
@@ -51,8 +45,13 @@ class CatalogController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $catalog->setcreatedDate(new \Datetime());
+            $catalog->setupdateDate(new \Datetime());
+            $catalog->setCreatedUser(1);
+            $catalog->setUpdateUser(2);
             $entityManager->persist($catalog);
             $entityManager->flush();
+            return $this->redirectToRoute('catalogs');
         }
 
             
@@ -64,21 +63,61 @@ class CatalogController extends AbstractController
 
     }
 
+    /**
+     * @Route("/catalog/edit/{id}", name="catalog_edit")
+     */
+    public function edit(Request $request, EntityManagerInterface $entityManager)
+    {
+        $repoCatalog = $this->getDoctrine()->getRepository(Catalog::class);
+
+        $id = $request->get('id');
+
+        $catalog =  $repoCatalog->find($id);
+
+        $form = $this ->createFormBuilder($catalog)
+                      ->add('name')
+                      ->add('description')
+
+                      ->getForm();
+        
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $catalog->setUpdateDate(new \Datetime());
+            $entityManager->persist($catalog);
+            $entityManager->flush();
+            return $this->redirectToRoute('catalogs');
+        }
+            
+        return $this->render('catalog/update.html.twig',[
+            'controller_name' => 'Modification de catégorie '.$catalog->getName(),
+            'formCatalog' => $form->createView()
+            
+        ]);
+
+    }
 
     /**
-     * @Route("/catalog/{id}", name="catalog")
+     * @Route("/catalog/delete/{id}", name="catalog_delete")
      */
-    public function listCatalog($id)
+    public function delete(Request $request, EntityManagerInterface $entityManager)
     {
-        $repo = $this->getDoctrine()->getRepository(Catalog::class);
+        $repoCatalog = $this->getDoctrine()->getRepository(Catalog::class);
 
-        $catalog = $repo->find($id);
+        $id = $request->get('id');
 
-        return $this->render('catalog/show.html.twig', [
-            'controller_name' => 'informations catégorie '.$id,
-            'catalog' => $catalog
-        ]);
+        $catalog =  $repoCatalog->find($id);
+
+        $entityManager->remove($catalog);
+        $entityManager->flush();
+        return $this->redirectToRoute('catalogs');
+
+
     }
+
+
+
 
 
    
