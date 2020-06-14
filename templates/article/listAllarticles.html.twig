@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+
+
+<div class="row mt-5">
+    <div class="col-sm-2 text-center">
+        <h3>Nom</h3>
+    </div>
+    <div class="col-sm-3">
+        <h3>Description</h3>
+    </div>
+    <div class="col-sm-2">
+        <h3>Catégorie</h3>
+    </div>
+    <div class="col-sm-1">
+        <h3>Prix</h3>
+    </div>
+    <div class="col-sm-2">
+        <h3>Créé le</h3>
+    </div>
+    <div class="col-sm-2">
+        <h3>Update le</h3>
+    </div>
+</div>
+</br>
+
+
+{% for article in articles %}
+    <div class="row mt-5">
+        <div class="col-sm-2 text-center">
+            <p>{{ article.name }}</p>
+        </div>
+        <div class="col-sm-3">
+            <p>{{ article.description }}</p>
+        </div>
+        <div class="col-sm-2">
+            <a href="{{ path('articles', {'id': article.catalog.id}) }}">{{ article.catalog.name }}</a>
+        </div>
+        <div class="col-sm-1">
+            <p>{{ article.price }} €</p>
+        </div>
+        <div class="col-sm-2">
+            <p>{{ article.createdDate | date('d-m-Y H:i:s') }}</p>
+        </div>
+        <div class="col-sm-2">
+            <p>{{ article.updateDate | date('d-m-Y H:i:s')}}</p>
+        </div>
+    </div>
+{% endfor %}
+
+
+{% endblock %}

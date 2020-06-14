@@ -3,14 +3,20 @@
 namespace App\Entity;
 
 
+use Serializable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ *      fields={"email"},
+ *      message= "Cet email est déja utilisé"
+ * )
  */
-class User 
+class User implements UserInterface, \Serializable
 
 {
     /**
@@ -27,6 +33,11 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(
+     *      min = 5,
+     *      minMessage = "Votre mot de passe doit contenir au moins {{ limit }} caractères"
+     * )
+     *
      */
     private $password;
 
@@ -36,8 +47,23 @@ class User
      */
     private $email;
     
-
+    /**
+     * @Assert\EqualTo(
+     *      propertyPath="password",
+     *      message = "Votre mot de passe doit être identique"
+     * )
+     */
     private $passwordConfirm;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdDate;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $updateDate;
 
 
     public function getId(): ?int
@@ -82,6 +108,29 @@ class User
     }
 
 
+    public function getCreatedDate(): ?\DateTimeInterface
+    {
+        return $this->createdDate;
+    }
+
+    public function setCreatedDate(\DateTimeInterface $createdDate): self
+    {
+        $this->createdDate = $createdDate;
+
+        return $this;
+    }
+
+    public function getUpdateDate(): ?\DateTimeInterface
+    {
+        return $this->updateDate;
+    }
+
+    public function setUpdateDate(\DateTimeInterface $updateDate): self
+    {
+        $this->updateDate = $updateDate;
+
+        return $this;
+    }
 
     /**
      * Get the value of passwordConfirm
@@ -102,4 +151,33 @@ class User
 
         return $this;
     }
+
+    public function eraseCredentials(){}
+
+    public function getSalt(){}
+
+    public function getRoles(){
+        return ['ROLE_USER'];
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->password
+        ) = unserialize($serialized, ['allowed_classes' => false]);
+    }
+
 }

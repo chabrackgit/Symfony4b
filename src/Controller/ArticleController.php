@@ -52,22 +52,104 @@ class ArticleController extends AbstractController
 
     }
 
-   
+    /**
+     * @Route("/article/edit/{id}", name="article_edit")
+     */
+    public function edit(Request $request, EntityManagerInterface $entityManager)
+    {
+        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+
+        $id = $request->get('id');
+
+        $article =  $repoArticle->find($id);
+
+
+        $form = $this ->createFormBuilder($article)
+                    ->add('name')
+                    ->add('description')
+                    ->add('price')
+                    ->add('catalog', EntityType::class, [
+                        'class' => Catalog::class,
+                        'choice_label' => 'name' ])
+                    ->add('save', SubmitType::class, ['label' => 'Mettre à jour'])
+                    ->getForm();   
+        
+        $form->handleRequest($request);
+
+        $idCatalog = $article->getCatalog()->getId();
+                        
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $article->setUpdateDate(new \Datetime());
+            $entityManager->persist($article);
+            $entityManager->flush();
+            return $this->redirectToRoute('articles', ['id'=>$idCatalog]);
+        }
+            
+        return $this->render('article/update.html.twig',[
+            'controller_name' => 'Modification d\'un article ',
+            'formArticle' => $form->createView()
+            
+        ]);
+
+    }
+    
+    /**
+     * @Route("/articles", name="allarticles")
+     */
+    public function listAllArticles(Request $request, EntityManagerInterface $entityManager)
+    {
+        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+
+        $articles = $repoArticle->findAll();
+      
+
+        return $this->render('article/listAllarticles.html.twig',[
+            'controller_name' => 'liste des articles',
+            'articles' => $articles
+            
+        ]);
+
+    }
+
+
     /**
      * @Route("/articles/catalog/{id}", name="articles")
      */
-    public function listArticleByCategory(Request $request, EntityManagerInterface $entityManager)
+    public function listArticleByCatalog(Request $request, EntityManagerInterface $entityManager)
     {
         $repoArticle = $this->getDoctrine()->getRepository(Article::class);
         $id = $request->get('id');
 
         $articles = $repoArticle->findBy(['catalog'=>$id]);
 
-        return $this->render('article/list.html.twig',[
+        return $this->render('article/listByCatalog.html.twig',[
             'controller_name' => 'liste des articles par catégories',
-            'articles' => $articles
+            'articles' => $articles,
+    
             
         ]);
+
+    }
+
+    /**
+     * @Route("/article/delete/{id}", name="article_delete")
+     */
+    public function delete(Request $request, EntityManagerInterface $entityManager)
+    {
+        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+
+        $id = $request->get('id');
+
+        $article =  $repoArticle->find($id);
+
+        $idCatalog = $article->getCatalog()->getId();
+
+        $entityManager->remove($article);
+        $entityManager->flush();
+        return $this->redirectToRoute('articles', ['id'=>$idCatalog]);
+
 
     }
 }

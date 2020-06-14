@@ -21,7 +21,7 @@ class CatalogController extends AbstractController
 
         $catalogs = $repo->findAll();
 
-        return $this->render('catalog/list.html.twig', [
+        return $this->render('catalog/listByCatalog.html.twig', [
             'controller_name' => 'liste des catégories',
             'catalogs' => $catalogs
         ]);

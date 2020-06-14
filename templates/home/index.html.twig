@@ -1,20 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Symfony CBK apprentissage !{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% if app.user %}
+    <div class="alert alert-success" role="alert">
+    <h4 class="alert-heading">bienvenue</h4>
+    <p>utilisateur authentifié</p>
+    <hr>
+    <p class="mb-0">Si vous souhaitez plus d'informations, merci de cliquer  <a href="#">ici</a>.</p>
+    </div>
+{% endif %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/laragon/www/symfony4/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/laragon/www/symfony4/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="text-center text-uppercase">
+        <h1> Symfony 4 par l'apprentissage </h1>
+    </div>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut pretium tortor eu velit dignissim, non blandit eros interdum. Donec eleifend nulla quis massa viverra, at tincidunt mauris commodo. Suspendisse id nisl non risus dictum euismod. Nulla condimentum arcu dui, ac aliquam orci tempus et. Nulla tincidunt, eros sed eleifend scelerisque, tortor risus tincidunt risus, et dignissim magna odio at enim. Curabitur ut sodales sem, et lacinia dolor. Aliquam et tortor vel tellus mollis pharetra. Cras tincidunt justo vitae libero mattis facilisis. Ut imperdiet eros sit amet dui ultricies lacinia. Praesent accumsan quis nunc non pulvinar. Cras vehicula tincidunt lacus, non vulputate quam. Vivamus in tristique risus, in porta nulla. Mauris eu erat dui. </p>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Fluid jumbotron</h1>
+            <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+        </div>
+    </div>
+
+
+
+
 {% endblock %}
