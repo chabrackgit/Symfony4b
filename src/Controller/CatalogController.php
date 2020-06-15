@@ -2,16 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+
 use App\Entity\Catalog;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CatalogController extends AbstractController
 {
+
     /**
      * @Route("/catalog", name="catalogs")
      */
@@ -32,35 +33,42 @@ class CatalogController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
+        	
+        $user = $this->getUser();
 
+        if(isset($user)){
+            $catalog = new Catalog();
 
-        $catalog = new Catalog();
+            $form = $this ->createFormBuilder($catalog)
+                        ->add('name')
+                        ->add('description')
 
-        $form = $this ->createFormBuilder($catalog)
-                      ->add('name')
-                      ->add('description')
+                        ->getForm();
+            
+            $form->handleRequest($request);
 
-                      ->getForm();
-        
-        $form->handleRequest($request);
+            if($form->isSubmitted() && $form->isValid()){
+                $catalog->setcreatedDate(new \Datetime());
+                $catalog->setupdateDate(new \Datetime());
+                $catalog->setCreatedUser(1);
+                $catalog->setUpdateUser(2);
+                $entityManager->persist($catalog);
+                $entityManager->flush();
+                return $this->redirectToRoute('catalogs');
+            }
 
-        if($form->isSubmitted() && $form->isValid()){
-            $catalog->setcreatedDate(new \Datetime());
-            $catalog->setupdateDate(new \Datetime());
-            $catalog->setCreatedUser(1);
-            $catalog->setUpdateUser(2);
-            $entityManager->persist($catalog);
-            $entityManager->flush();
-            return $this->redirectToRoute('catalogs');
+                
+            return $this->render('catalog/create.html.twig',[
+                'controller_name' => 'Création nouvelle catégorie',
+                'formCatalog' => $form->createView()
+                
+            ]);
+        }else{
+
+            $this->addFlash('danger', 'Vous ne pouvez pas accéder à cette ressource');
+            return $this->redirectToRoute('homeindex');
+
         }
-
-            
-        return $this->render('catalog/create.html.twig',[
-            'controller_name' => 'Création nouvelle catégorie',
-            'formCatalog' => $form->createView()
-            
-        ]);
-
     }
 
     /**
@@ -68,34 +76,42 @@ class CatalogController extends AbstractController
      */
     public function edit(Request $request, EntityManagerInterface $entityManager)
     {
-        $repoCatalog = $this->getDoctrine()->getRepository(Catalog::class);
 
-        $id = $request->get('id');
+        $user = $this->getUser();
 
-        $catalog =  $repoCatalog->find($id);
+        if(isset($user)){
 
-        $form = $this ->createFormBuilder($catalog)
-                      ->add('name')
-                      ->add('description')
+            $repoCatalog = $this->getDoctrine()->getRepository(Catalog::class);
 
-                      ->getForm();
-        
-        $form->handleRequest($request);
+            $id = $request->get('id');
 
-        if($form->isSubmitted() && $form->isValid()) {
+            $catalog =  $repoCatalog->find($id);
 
-            $catalog->setUpdateDate(new \Datetime());
-            $entityManager->persist($catalog);
-            $entityManager->flush();
-            return $this->redirectToRoute('catalogs');
-        }
+            $form = $this ->createFormBuilder($catalog)
+                        ->add('name')
+                        ->add('description')
+
+                        ->getForm();
             
-        return $this->render('catalog/update.html.twig',[
-            'controller_name' => 'Modification de catégorie '.$catalog->getName(),
-            'formCatalog' => $form->createView()
-            
-        ]);
+            $form->handleRequest($request);
 
+            if($form->isSubmitted() && $form->isValid()) {
+
+                $catalog->setUpdateDate(new \Datetime());
+                $entityManager->persist($catalog);
+                $entityManager->flush();
+                return $this->redirectToRoute('catalogs');
+            }
+                
+            return $this->render('catalog/update.html.twig',[
+                'formCatalog' => $form->createView()
+                
+            ]);
+        }else
+        {
+            $this->addFlash('danger', 'Vous ne pouvez pas accéder à cette ressource');
+            return $this->redirectToRoute('homeindex');
+        }        
     }
 
     /**
@@ -103,16 +119,24 @@ class CatalogController extends AbstractController
      */
     public function delete(Request $request, EntityManagerInterface $entityManager)
     {
-        $repoCatalog = $this->getDoctrine()->getRepository(Catalog::class);
+        $user = $this->getUser();
 
-        $id = $request->get('id');
+        if(isset($user)){
+            
+            $repoCatalog = $this->getDoctrine()->getRepository(Catalog::class);
 
-        $catalog =  $repoCatalog->find($id);
+            $id = $request->get('id');
 
-        $entityManager->remove($catalog);
-        $entityManager->flush();
-        return $this->redirectToRoute('catalogs');
+            $catalog =  $repoCatalog->find($id);
 
+            $entityManager->remove($catalog);
+            $entityManager->flush();
+            return $this->redirectToRoute('catalogs');
+        }else
+        {
+            $this->addFlash('danger', 'Vous ne pouvez pas accéder à cette ressource');
+            return $this->redirectToRoute('homeindex');
+        }
 
     }
 

@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}CBK Digital{% endblock %}</title>
 
         {# beware that the blocks in your template may be named different #}
         {% block head_css %}
@@ -43,9 +43,15 @@
                 </ul>
                 {% if not app.user %}
                     <span class="navbar-text">
+                        <a class="nav-link" href="{{ path('security_registration') }}">S'inscrire</a>
+                    </span>
+                    <span class="navbar-text">
                         <a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
                     </span>
                 {% else %}
+                    <span class="navbar-text">
+                        <a class="nav-link" href="{{ path('security_edit', {'id': app.user.id}) }}">Editer Profil</a>
+                    </span>
                     <span class="navbar-text">
                         <a class="nav-link" href="{{ path('security_logout') }}">Deconnexion</a>
                     </span>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Catalog;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,80 +19,101 @@ class ArticleController extends AbstractController
      * @Route("/article/new", name="article_create")
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
-    {
-        $article = new Article();
+    {   
+        $user = $this->getUser();
 
-        $form = $this ->createFormBuilder($article)
-                      ->add('name')
-                      ->add('description')
-                      ->add('price')
-                      ->add('catalog', EntityType::class, [
-                        'class' => Catalog::class,
-                        'choice_label' => 'name' ])
-                      ->add('save', SubmitType::class, ['label' => 'Créer article'])
-                      ->getForm();
-        
-        $form->handleRequest($request);
+        if(isset($user)){
+            $article = new Article();
 
-        if($form->isSubmitted() && $form->isValid()){
-            $article->setcreatedDate(new \Datetime());
-            $article->setupdateDate(new \Datetime());
-            $article->setCreatedUser(1);
-            $article->setUpdateUser(1);
-            $entityManager->persist($article);
-            $entityManager->flush();
-            return $this->redirectToRoute('catalogs');
+            $form = $this ->createFormBuilder($article)
+                        ->add('name')
+                        ->add('description')
+                        ->add('price')
+                        ->add('catalog', EntityType::class, [
+                            'class' => Catalog::class,
+                            'choice_label' => 'name' ])
+                        ->add('save', SubmitType::class, ['label' => 'Créer article'])
+                        ->getForm();
+            
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()){
+                $article->setcreatedDate(new \Datetime());
+                $article->setupdateDate(new \Datetime());
+                $article->setCreatedUser(1);
+                $article->setUpdateUser(1);
+                $entityManager->persist($article);
+                $entityManager->flush();
+                return $this->redirectToRoute('catalogs');
+            }
+
+                
+            return $this->render('article/create.html.twig',[
+                'controller_name' => 'Création nouvel article',
+                'formArticle' => $form->createView()
+                
+            ]);
+
+        }else
+        {
+            $this->addFlash('danger', 'Vous ne pouvez pas accéder à cette ressource');
+            return $this->redirectToRoute('homeindex');
         }
 
-            
-        return $this->render('article/create.html.twig',[
-            'controller_name' => 'Création nouvel article',
-            'formArticle' => $form->createView()
-            
-        ]);
+
+        
 
     }
 
     /**
      * @Route("/article/edit/{id}", name="article_edit")
      */
-    public function edit(Request $request, EntityManagerInterface $entityManager)
+    public function edit(Request $request, EntityManagerInterface $entityManager, ArticleRepository $repoArticle)
     {
-        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+        $user = $this->getUser();
 
-        $id = $request->get('id');
+        if(isset($user)){
 
-        $article =  $repoArticle->find($id);
+            $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+
+            $id = $request->get('id');
+
+            $article =  $repoArticle->find($id);
 
 
-        $form = $this ->createFormBuilder($article)
-                    ->add('name')
-                    ->add('description')
-                    ->add('price')
-                    ->add('catalog', EntityType::class, [
-                        'class' => Catalog::class,
-                        'choice_label' => 'name' ])
-                    ->add('save', SubmitType::class, ['label' => 'Mettre à jour'])
-                    ->getForm();   
-        
-        $form->handleRequest($request);
+            $form = $this ->createFormBuilder($article)
+                        ->add('name')
+                        ->add('description')
+                        ->add('price')
+                        ->add('catalog', EntityType::class, [
+                            'class' => Catalog::class,
+                            'choice_label' => 'name' ])
+                        ->add('save', SubmitType::class, ['label' => 'Mettre à jour'])
+                        ->getForm();   
+            
+            $form->handleRequest($request);
 
-        $idCatalog = $article->getCatalog()->getId();
-                        
+            $idCatalog = $article->getCatalog()->getId();
+                            
 
-        if($form->isSubmitted() && $form->isValid()) {
+            if($form->isSubmitted() && $form->isValid()) {
 
-            $article->setUpdateDate(new \Datetime());
-            $entityManager->persist($article);
-            $entityManager->flush();
-            return $this->redirectToRoute('articles', ['id'=>$idCatalog]);
+                $article->setUpdateDate(new \Datetime());
+                $entityManager->persist($article);
+                $entityManager->flush();
+                return $this->redirectToRoute('articles', ['id'=>$idCatalog]);
+            }
+                
+            return $this->render('article/update.html.twig',[
+                'controller_name' => 'Modification d\'un article ',
+                'formArticle' => $form->createView()
+                
+            ]);
+        }else
+        {
+            $this->addFlash('danger', 'Vous ne pouvez pas accéder à cette ressource');
+            return $this->redirectToRoute('homeindex');
         }
-            
-        return $this->render('article/update.html.twig',[
-            'controller_name' => 'Modification d\'un article ',
-            'formArticle' => $form->createView()
-            
-        ]);
 
     }
     
@@ -124,6 +146,7 @@ class ArticleController extends AbstractController
 
         $articles = $repoArticle->findBy(['catalog'=>$id]);
 
+
         return $this->render('article/listByCatalog.html.twig',[
             'controller_name' => 'liste des articles par catégories',
             'articles' => $articles,
@@ -138,17 +161,27 @@ class ArticleController extends AbstractController
      */
     public function delete(Request $request, EntityManagerInterface $entityManager)
     {
-        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+        $user = $this->getUser();
 
-        $id = $request->get('id');
+        if(isset($user)){
 
-        $article =  $repoArticle->find($id);
+            $repoArticle = $this->getDoctrine()->getRepository(Article::class);
 
-        $idCatalog = $article->getCatalog()->getId();
+            $id = $request->get('id');
 
-        $entityManager->remove($article);
-        $entityManager->flush();
-        return $this->redirectToRoute('articles', ['id'=>$idCatalog]);
+            $article =  $repoArticle->find($id);
+
+            $idCatalog = $article->getCatalog()->getId();
+
+            $entityManager->remove($article);
+            $entityManager->flush();
+            return $this->redirectToRoute('articles', ['id'=>$idCatalog]);
+        
+        }else
+        {
+            $this->addFlash('danger', 'Vous ne pouvez pas accéder à cette ressource');
+            return $this->redirectToRoute(('homeindex'));
+        }
 
 
     }

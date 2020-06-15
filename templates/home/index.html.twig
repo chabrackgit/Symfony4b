@@ -4,12 +4,18 @@
 
 {% block body %}
 
+{% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+{% endfor %}
+
 {% if app.user %}
     <div class="alert alert-success" role="alert">
-    <h4 class="alert-heading">bienvenue</h4>
-    <p>utilisateur authentifié</p>
-    <hr>
-    <p class="mb-0">Si vous souhaitez plus d'informations, merci de cliquer  <a href="#">ici</a>.</p>
+        <h4 class="alert-heading">Bienvenue {{ (app.user.username | capitalize) }}</h4>
+        <p>Utilisateur authentifié</p>
+        <hr>
+        <p class="mb-0">Si vous souhaitez editer votre profil , merci de cliquer  <a href="{{ path('security_edit', {'id': app.user.id}) }}">ici</a>.</p>
     </div>
 {% endif %}
 

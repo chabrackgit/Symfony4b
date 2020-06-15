@@ -7,9 +7,12 @@ use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
@@ -41,6 +44,47 @@ class SecurityController extends AbstractController
             'form'=> $form->createView()
         ]);  
         
+    }
+
+
+    /**
+     * @Route("/edit/profil/{id}", name="security_edit")
+     */
+    public function edit(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder)
+    {
+        $repoUser = $this->getDoctrine()->getRepository(User::class);
+
+        $id = $request->get('id');
+
+        $user =  $repoUser->find($id);
+
+        $form = $this->createFormBuilder($user)
+                     ->add('username')
+                     ->add('email', EmailType::class, [
+                         'disabled'=> 1
+                     ])
+                     ->add('password', PasswordType::class)
+                     ->add('save', SubmitType::class, ['label' => 'Mettre à jour'])
+                     ->getForm();
+        
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $hash = $encoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($hash);
+            $user->setpasswordConfirm($user->getpassword());
+            $user->setUpdateDate(new \Datetime());
+            $entityManager->persist($user);
+            $entityManager->flush();
+            return $this->redirectToRoute('homeindex');
+        }
+            
+        return $this->render('security/update.html.twig',[
+            'formUser' => $form->createView()
+            
+        ]);
+
     }
 
     /**

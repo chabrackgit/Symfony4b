@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+
+{% block body %}
+<form action="#" method="POST">
+    <div class="container">
+        <div class="form-group">
+       
+            <h1>Edition Profil</h1>
+
+            {{ form_start(formUser) }}
+            
+            {{ form_row(formUser.username, {'label': 'Utilisateur', 'attr': {'placeholder':'Nom d\'utilisateur'}}) }}
+            {{ form_row(formUser.email, {'label': 'Email', 'attr': {'placeholder':'example@email.fr'}}) }}
+            {{ form_row(formUser.password, {'label': 'Password', 'attr': {'placeholder':'******'}}) }}
+           
+
+
+            {{ form_end(formUser) }}
+        </div>
+    </div>
+</form>
+{% endblock %}
