@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\CatalogRepository")
@@ -15,36 +16,43 @@ class Catalog
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"listCatalog"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"listCatalog"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"listCatalog"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"listCatalog"})
      */
     private $createdDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"listCatalog"})
      */
     private $updateDate;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"listCatalog"})
      */
     private $createdUser;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"listCatalog"})
      */
     private $updateUser;
 
