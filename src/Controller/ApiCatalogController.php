@@ -78,7 +78,7 @@ class ApiCatalogController extends AbstractController
         return new JsonResponse(
             "La catégorie a bien été mise à jour",
             Response::HTTP_OK,
-            ["location"=>"api/catalog/".$catalog->getId()],
+            [],
             true);
         
     }
