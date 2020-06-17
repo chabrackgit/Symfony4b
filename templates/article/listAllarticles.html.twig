@@ -31,7 +31,7 @@
 {% for article in articles %}
     <div class="row mt-5">
         <div class="col-sm-2 text-center">
-            <p>{{ article.name }}</p>
+            <p><a href="{{ path('article_show', {'id' : article.id}) }}">{{ article.name }}</a></p>
         </div>
         <div class="col-sm-3">
             <p>{{ article.description }}</p>

@@ -34,25 +34,21 @@ class Catalog
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"listCatalog"})
      */
     private $createdDate;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"listCatalog"})
      */
     private $updateDate;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"listCatalog"})
      */
     private $createdUser;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"listCatalog"})
      */
     private $updateUser;
 

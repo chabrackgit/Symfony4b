@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+    <div class="col-md-10">
+        <h4>{{ article.name }}<h4>
+    </div>
+    <div class="col-md-2">
+        <h4>{{ article.price }} € </h4>
+    </div>
+</div>
+<div class="row mt-5">
+    <div class="col-md-10">
+        <h4>DESCRIPTION</h4>
+        {{ article.description }}
+</div>
+
+
+{% endblock %}

@@ -60,10 +60,26 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('homeindex');
         }
 
-
-        
-
     }
+
+    /**
+     * @Route("/article/{id}", name="article_show")
+     */
+    public function show(Request $request){
+
+        $repoArticle = $this->getDoctrine()->getRepository(Article::class);
+        
+        $id = $request->get('id');
+
+        $article = $repoArticle->find($id);
+
+        return $this->render('article/show.html.twig',[
+            'controller_name' => 'Article',
+            'article' => $article
+    
+        ]);
+    }
+
 
     /**
      * @Route("/article/edit/{id}", name="article_edit")
@@ -135,11 +151,11 @@ class ArticleController extends AbstractController
 
     }
 
-
+    
     /**
-     * @Route("/articles/catalog/{id}", name="articles")
+     * @Route("/articles/{id}", name="articles")
      */
-    public function listArticleByCatalog(Request $request, EntityManagerInterface $entityManager)
+    public function listArticleByCatalog(Request $request)
     {
         $repoArticle = $this->getDoctrine()->getRepository(Article::class);
         $id = $request->get('id');
@@ -185,4 +201,5 @@ class ArticleController extends AbstractController
 
 
     }
+
 }
