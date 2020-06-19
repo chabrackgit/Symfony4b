@@ -43,7 +43,9 @@ class User implements UserInterface, \Serializable
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Email()
+     * @Assert\Email(
+     *      message="veuillez saisir une adresse mail valide"
+     * )
      */
     private $email;
     

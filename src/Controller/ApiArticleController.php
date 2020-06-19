@@ -17,6 +17,7 @@ class ApiArticleController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Get("/api/articles")
+     * Renvoie la liste de tous les articles
      */
     public function index(SerializerInterface $serializer)
     {
@@ -35,7 +36,31 @@ class ApiArticleController extends AbstractController
 
     /**
      * @Rest\View()
+     * @Rest\Get("/api/article/{id}")
+     * Renvoi un article grâce à son id
+     */
+    public function show(Request $request, SerializerInterface $serializer)
+    {
+        $id = $request->get('id');
+
+        $repo = $this->getDoctrine()->getRepository(Article::class);
+
+        $article = $repo->find($id);
+
+        $data = $serializer->serialize($article, 'json', [
+            'groups'=>['listArticles']
+        ]);
+
+        return new Response($data, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+
+    }
+
+    /**
+     * @Rest\View()
      * @Rest\Post("/api/article")
+     * Insérer un nouvel article
      */
     public function create(Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
 
@@ -66,6 +91,7 @@ class ApiArticleController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Put("/api/article/{id}")
+     * Modifie un article
      */
     public function edit(Article $article, Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
 
@@ -89,6 +115,7 @@ class ApiArticleController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Delete("/api/article/{id}")
+     * supprime un article
      */
     public function delete(Article $article, EntityManagerInterface $manager){
 

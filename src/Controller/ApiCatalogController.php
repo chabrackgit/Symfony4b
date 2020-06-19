@@ -16,10 +16,13 @@ class ApiCatalogController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Get("/api/catalog")
+     * Renvoie la liste de toutes les catégories
      */
     public function index(SerializerInterface $serializer)
     {
         $repo = $this->getDoctrine()->getRepository(Catalog::class);
+
+        date_default_timezone_set('UTC');
 
         $catalogs = $repo->findAll();
 
@@ -34,7 +37,32 @@ class ApiCatalogController extends AbstractController
 
     /**
      * @Rest\View()
+     * @Rest\Get("/api/catalog/{id}")
+     * Renvoi une catégorie grâce à son id
+     */
+    public function show(Request $request, SerializerInterface $serializer)
+    {
+        $id = $request->get('id');
+
+        $repo = $this->getDoctrine()->getRepository(Catalog::class);
+
+        $catalog = $repo->find($id);
+
+        $data = $serializer->serialize($catalog, 'json', [
+            'groups'=>['listCatalog']
+        ]);
+
+        return new Response($data, 200, [
+            'Content-Type' => 'application/json'
+        ]);
+
+    }
+
+
+    /**
+     * @Rest\View()
      * @Rest\Post("/api/catalog")
+     * Insèrez une nouvelle catégorie
      */
     public function create(Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
 
@@ -63,6 +91,7 @@ class ApiCatalogController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Put("/api/catalog/{id}")
+     * Modifier une catégorie avec son id
      */
     public function edit(Catalog $catalog, Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
 
@@ -86,6 +115,7 @@ class ApiCatalogController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Delete("/api/catalog/{id}")
+     * supprime une catégorie
      */
     public function delete(Catalog $catalog, EntityManagerInterface $manager){
 

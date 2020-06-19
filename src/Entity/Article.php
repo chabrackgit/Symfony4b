@@ -39,27 +39,32 @@ class Article
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"listArticles"})
      */
     private $createdDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"listArticles"})
      */
     private $updateDate;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"listArticles"})
      */
     private $createdUser;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"listArticles"})
      */
     private $updateUser;
 
     /**
      * @ORM\ManyToOne(targetEntity=Catalog::class, inversedBy="articles")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"listArticles"})
      */
     private $catalog;
 

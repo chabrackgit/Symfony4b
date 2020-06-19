@@ -11,23 +11,48 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        chain_provider:
+            chain:
+                providers: [in_memory, in_database]
+              
 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: true
+        
+        # Permet de se connecter sur Twig
+        # main:
+        #     anonymous: true
 
-            provider: in_database
+        #     provider: in_database
             
-            form_login:
-                login_path: security_login
-                check_path: security_login
+        #     form_login:
+        #         login_path: security_login
+        #         check_path: security_login
 
-            logout:
-                path: security_logout
-                target: /
+        #     logout:
+        #         path: security_logout
+        #         target: /
+        
+
+        # permet de se connecter avec token (test sur postman)
+        main:         
+            pattern: ^/api
+            stateless: true
+            anonymous: true
+            provider: chain_provider
+            json_login:
+                username_path: email
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            guard:
+                authenticators: 
+                - lexik_jwt_authentication.jwt_token_authenticator
+
+
+
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -38,5 +63,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+         - { path: ^/api/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

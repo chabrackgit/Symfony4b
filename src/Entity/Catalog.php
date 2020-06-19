@@ -16,39 +16,44 @@ class Catalog
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"listCatalog"})
+     * @Groups({"listCatalog","listArticles"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"listCatalog"})
+     * @Groups({"listCatalog","listArticles"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"listCatalog"})
+     * @Groups({"listCatalog","listArticles"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"listCatalog","listArticles"})
      */
     private $createdDate;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"listCatalog","listArticles"})
      */
     private $updateDate;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"listCatalog","listArticles"})
      */
     private $createdUser;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"listCatalog","listArticles"})
      */
     private $updateUser;
 
