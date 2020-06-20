@@ -39,7 +39,7 @@ class AppFixtures extends Fixture
      */
     public function loadUser()
     {
-        for($i = 1; $i<=150; $i++){
+        for($i = 1; $i<150; $i++){
             $user = new User();
 
             $user->setUsername($this->faker->userName())
