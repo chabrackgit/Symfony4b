@@ -19,6 +19,12 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class User implements UserInterface, \Serializable
 
 {
+    const ROLE_ADMIN     = ['ROLE_ADMIN'];
+    const ROLE_MANAGER   = ['ROLE_MANAGER'];
+    const ROLE_USER      = ['ROLE_USER'];
+    const DEFAULT_ROLE   = ['ROLE_USER'];
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -50,6 +56,12 @@ class User implements UserInterface, \Serializable
     private $email;
     
     /**
+     * @ORM\Column(type="simple_array", length=255, nullable=true)
+     */
+    private $roles;
+
+
+    /**
      * @Assert\EqualTo(
      *      propertyPath="password",
      *      message = "Votre mot de passe doit être identique"
@@ -66,6 +78,12 @@ class User implements UserInterface, \Serializable
      * @ORM\Column(type="datetime")
      */
     private $updateDate;
+
+
+    public function __construct()
+    {
+        $this->roles = self::DEFAULT_ROLE;
+    }
 
 
     public function getId(): ?int
@@ -158,8 +176,27 @@ class User implements UserInterface, \Serializable
 
     public function getSalt(){}
 
-    public function getRoles(){
-        return ['ROLE_USER'];
+        
+    /**
+     * getRoles
+     *
+     * @return (Role|string)[] roles
+     */
+    public function getRoles(): array
+    {
+        return $this->roles;
+    }
+    
+    /**
+     * Affecte les rôles de l'utilisateur
+     *
+     * @param  array $roles
+     * @return self
+     */
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
     }
 
     public function serialize()
