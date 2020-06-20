@@ -10,7 +10,11 @@ security:
         in_database:
             entity:
                 class: App\Entity\User
-                property: email
+                #config pour Token 
+                property: username
+
+                #config pour connexion avec email avec sortie symfony affichage twig
+                #property: username
         chain_provider:
             chain:
                 providers: [in_memory, in_database]
@@ -21,7 +25,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         
-        # Permet de se connecter sur Twig
+        # config pour connexion avec email avec sortie symfony affichage twig
         # main:
         #     anonymous: true
 
@@ -36,14 +40,13 @@ security:
         #         target: /
         
 
-        # permet de se connecter avec token (test sur postman)
+        #config pour Token 
         main:         
             pattern: ^/api
             stateless: true
             anonymous: true
             provider: chain_provider
             json_login:
-                username_path: email
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
