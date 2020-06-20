@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiArticleController extends AbstractController
@@ -60,6 +61,7 @@ class ApiArticleController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Post("/api/article")
+     * @Security("has_role('ROLE_MANAGER')")
      * Insérer un nouvel article
      */
     public function create(Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
@@ -91,6 +93,7 @@ class ApiArticleController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Put("/api/article/{id}")
+     * @Security("has_role('ROLE_MANAGER')")
      * Modifie un article
      */
     public function edit(Article $article, Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
@@ -115,6 +118,7 @@ class ApiArticleController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Delete("/api/article/{id}")
+     * @Security("has_role('ROLE_ADMIN')")
      * supprime un article
      */
     public function delete(Article $article, EntityManagerInterface $manager){

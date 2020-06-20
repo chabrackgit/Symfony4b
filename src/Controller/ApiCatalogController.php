@@ -7,9 +7,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ApiCatalogController extends AbstractController
 {
@@ -62,6 +63,7 @@ class ApiCatalogController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Post("/api/catalog")
+     * @Security("has_role('ROLE_MANAGER')")
      * Insèrez une nouvelle catégorie
      */
     public function create(Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
@@ -91,6 +93,7 @@ class ApiCatalogController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Put("/api/catalog/{id}")
+     * @Security("has_role('ROLE_MANAGER')")
      * Modifier une catégorie avec son id
      */
     public function edit(Catalog $catalog, Request $request, EntityManagerInterface $manager, SerializerInterface $serializer){
@@ -115,6 +118,7 @@ class ApiCatalogController extends AbstractController
     /**
      * @Rest\View()
      * @Rest\Delete("/api/catalog/{id}")
+     * @Security("has_role('ROLE_ADMIN')")
      * supprime une catégorie
      */
     public function delete(Catalog $catalog, EntityManagerInterface $manager){
