@@ -59,7 +59,6 @@ class SecurityController extends AbstractController
         $user =  $repoUser->find($id);
 
         $form = $this->createFormBuilder($user)
-                     ->add('username')
                      ->add('email', EmailType::class, [
                          'disabled'=> 1
                      ])

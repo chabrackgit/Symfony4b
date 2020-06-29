@@ -7,7 +7,6 @@ use App\Entity\Catalog;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CatalogController extends AbstractController
@@ -21,6 +20,7 @@ class CatalogController extends AbstractController
         $repo = $this->getDoctrine()->getRepository(Catalog::class);
 
         $catalogs = $repo->findAll();
+
 
         return $this->render('catalog/listByCatalog.html.twig', [
             'controller_name' => 'liste des catégories',

@@ -42,10 +42,9 @@ class AppFixtures extends Fixture
         for($i = 1; $i<150; $i++){
             $user = new User();
 
-            $user->setUsername($this->faker->userName())
-                 ->setEmail($this->faker->companyEmail());
+            $user->setEmail($this->faker->companyEmail());
                 
-            $hash = $this->encoder->encodePassword($user, $user->getUsername());
+            $hash = $this->encoder->encodePassword($user, $user->getEmail());
             $user->setPassword($hash)
                  ->setCreatedDate(new \DateTime())
                  ->setUpdateDate(new \DateTime());
@@ -57,10 +56,9 @@ class AppFixtures extends Fixture
         
         $user = new User();
 
-        $user->setUsername('bossadmin')
-             ->setEmail('boss@cbk.fr');
+        $user->setEmail('boss@cbk.fr');
         
-        $hash = $this->encoder->encodePassword($user, $user->getUsername());
+        $hash = $this->encoder->encodePassword($user, $user->getEmail());
 
         $user->setPassword($hash)
              ->setRoles(USER::ROLE_ADMIN)
@@ -71,10 +69,9 @@ class AppFixtures extends Fixture
 
         $user = new User();
 
-        $user->setUsername('manager')
-             ->setEmail('manager@cbk.fr');
+        $user->setEmail('manager@cbk.fr');
         
-        $hash = $this->encoder->encodePassword($user, $user->getUsername());
+        $hash = $this->encoder->encodePassword($user, $user->getEmail());
 
         $user->setPassword($hash)
              ->setRoles(USER::ROLE_MANAGER)
