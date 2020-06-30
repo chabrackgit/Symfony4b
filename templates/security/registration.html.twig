@@ -11,6 +11,8 @@
             {{ form_start(form) }}
             
             {{ form_row(form.email, {'label': 'Email', 'attr': {'placeholder':'example@email.fr'}}) }}
+            {{ form_row(form.lastname, {'label': 'Nom', 'attr': {'placeholder':'DEVILLE'}}) }}
+            {{ form_row(form.firstname, {'label': 'Prénom', 'attr': {'placeholder':'fabien'}}) }}
             {{ form_row(form.password, {'label': 'Mot de passe', 'attr': {'placeholder':'******'}}) }}
             {{ form_row(form.passwordConfirm, {'label': 'Confirmez votre mot de passe', 'attr': {'placeholder':'******'}}) }}
 

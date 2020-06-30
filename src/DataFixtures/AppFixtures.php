@@ -39,11 +39,15 @@ class AppFixtures extends Fixture
      */
     public function loadUser()
     {
-        for($i = 1; $i<150; $i++){
+        for($i = 1; $i<100; $i++){
             $user = new User();
 
-            $user->setEmail($this->faker->companyEmail());
-                
+            $user->setFirstname($this->faker->firstNameMale());
+            $user->setLastname($this->faker->lastName());                             
+
+            $user->setEmail($user->getFirstname().'.'.$user->getLastname().'@cbk.fr');
+
+
             $hash = $this->encoder->encodePassword($user, $user->getEmail());
             $user->setPassword($hash)
                  ->setCreatedDate(new \DateTime())
@@ -60,7 +64,10 @@ class AppFixtures extends Fixture
         
         $hash = $this->encoder->encodePassword($user, $user->getEmail());
 
-        $user->setPassword($hash)
+        $user
+             ->setLastname('BOSS')
+             ->setFirstname('Admin')
+             ->setPassword($hash)
              ->setRoles(USER::ROLE_ADMIN)
              ->setCreatedDate(new \DateTime())
              ->setUpdateDate(new \DateTime());
@@ -73,7 +80,10 @@ class AppFixtures extends Fixture
         
         $hash = $this->encoder->encodePassword($user, $user->getEmail());
 
-        $user->setPassword($hash)
+        $user
+             ->setLastname('MANAGER')
+             ->setFirstname('Manager')  
+             ->setPassword($hash)
              ->setRoles(USER::ROLE_MANAGER)
              ->setCreatedDate(new \DateTime())
              ->setUpdateDate(new \DateTime());

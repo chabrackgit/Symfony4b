@@ -15,6 +15,8 @@ class RegistrationType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class)
+            ->add('lastname')
+            ->add('firstname')
             ->add('password', PasswordType::class)
             ->add('passwordConfirm', PasswordType::class)
         ;
